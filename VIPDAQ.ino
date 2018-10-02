@@ -2,7 +2,8 @@
 const unsigned long ONE_SECOND = 500UL; //500 = 1 per second. 
 const unsigned long FIVE_SECONDS = (ONE_SECOND * 5); //168.39 .46 .59
 const unsigned long ONE_MINUTE = (ONE_SECOND * 60); //168.77
-const unsigned long FIVE_MINUTES = (ONE_MINUTE * 5);
+const unsigned long FIVE_MINUTES = (ONE_MINUTE * 5); //160.76 //168.39
+const unsigned long HALF_HOUR = (ONE_MINUTE * 30); 
 const unsigned long LoopSize = FIVE_MINUTES;
 
 #include <AD770X.h>
