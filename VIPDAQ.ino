@@ -5,6 +5,11 @@ const unsigned long ONE_MINUTE = (ONE_SECOND * 60); //168.77
 const unsigned long FIVE_MINUTES = (ONE_MINUTE * 5); //160.76 168.39 168.46 156.79 149 165 150 164 168 (1h 36m)
 const unsigned long HALF_HOUR = (ONE_MINUTE * 30); //163.88
 
+//30 Minutes
+//00:30:26 - 163.88mA
+//01:00:39 - 166.63mA
+//01:06:31 - 155.49mA
+
 const unsigned long LoopSize = HALF_HOUR;
 
 #include <AD770X.h>
