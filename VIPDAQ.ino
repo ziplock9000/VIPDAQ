@@ -45,6 +45,7 @@ void loop()
 	{
 		accumulator += ad7705.readADResult(AD770X::CHN_AIN1);
 	}
+	delay(500);
 	float a = accumulator / LoopSize;
 	float millivolts = ((a*0.000076295109)-0.00076)*1000;
 
@@ -52,7 +53,7 @@ void loop()
 	Serial.print(" - ");
 	Serial.print(millivolts, 2);
 	Serial.println("mA");
-
+	delay(500);
 	/*
 	unsigned int ADCValue1 = ad7705.readADResult(AD770X::CHN_AIN1);
 	unsigned int ADCValue2 = ad7705.readADResult(AD770X::CHN_AIN2);
