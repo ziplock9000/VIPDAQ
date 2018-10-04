@@ -16,6 +16,8 @@ const unsigned long LoopRepeats = 40;
 //124mA
 //Reboot VIPDAQ (reset calibration)
 //127, 127, 128, 127
+//Off overnight
+//146,131,130,130,130,130,130,130,130,130
 
 
 //30 Minutes
