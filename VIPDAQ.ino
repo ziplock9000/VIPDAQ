@@ -63,12 +63,78 @@ const unsigned long LoopRepeats = 40;
 18 : 16 : 39 - 166.63mA
 */
 
+//############################################################
+
+/*
+Parts of this code and the entirety of the SPI and AD7705ADC libraries have been taken from the repo of tom-biskupic
+https://github.com/tom-biskupic/LabPSU
+*/
+
+/*
+#include <AD7705ADC.h>
+
+const float RANGE_TO_5V = 0.00007629510948348210879682612344549;
+const float RANGE_TO_5000mV = 0.07629510948348210879682612344549;
+
+const int ADC_SS_PIN = 0;
+const int ADC_DATA_READY_PIN = 4; // PORTD
+
+AD7705ADC m_adc(ADC_SS_PIN, ADC_DATA_READY_PIN);
+
+const AD7705ADC::Channel VOLTAGE_ADC_CHANNEL = AD7705ADC::CHANNEL_0;
+const AD7705ADC::Channel CURRENT_ADC_CHANNEL = AD7705ADC::CHANNEL_1;
+
+void initADC()
+{
+	//
+	//	We run the ADC in bipolar mode so we can get the full 0..5V range.
+	//	The AIN- is tied to the reference so the input is a bipolar number
+	//	relative to that.
+	//
+	//	Because of the bipolar requirement we can't use gain.
+	//	I am using a 2MHz crystal which means clockdiv is 1. 
+	//	An update rate of 50Hz or less is fine so filter select is 0
+	//
+	m_adc.reset();
+	m_adc.setClockRegister(AD7705ADC::CLOCK_2, 0);
+
+	m_adc.setSetupRegister(
+		VOLTAGE_ADC_CHANNEL,                    //  Channel
+		AD7705ADC::AD7705ADC::MODE_NORMAL,    //	CAL mode
+		AD7705ADC::GAIN_1,					    //	Gain = 1
+		AD7705ADC::UNIPOLAR,		            //	Polarity
+		false,								    //	Not buffered
+		false);								    //	F Sync off
+
+	m_adc.reset();
+
+	m_adc.setSetupRegister(
+		CURRENT_ADC_CHANNEL,                    //  Channel
+		AD7705ADC::AD7705ADC::MODE_NORMAL,    //	CAL mode
+		AD7705ADC::GAIN_1,					    //	Gain = 1
+		AD7705ADC::UNIPOLAR,                    //	Polarity
+		false,								    //	Not buffered
+		false);								    //	F Sync off
+}
+
+uint16_t readADC(const AD7705ADC::Channel channel)
+{
+	m_adc.reset();
+
+	uint16_t value = m_adc.getValue(channel);
+
+	return value;
+}
+*/
+//############################################################
 
 
 #include <AD770X.h>
 
 AD770X ad7705(65535); 
 
+
+//############################################################
 unsigned long zerotime;
 
 void setup()
@@ -76,11 +142,16 @@ void setup()
 	Serial.begin(9600);
 	ad7705.reset();
 	ad7705.init(AD770X::CHN_AIN1);
-	//ad7705.init(AD770X::CHN_AIN2);
+	//initADC();
 
 	Serial.print ("Sample window @ 500sps :");
-	Serial.print(SingleLoopSize*LoopRepeats*2);
-	Serial.println("ms");
+	float windowSizeMS=SingleLoopSize*LoopRepeats * 2;
+	Serial.print(windowSizeMS);
+	Serial.print("ms/");
+	Serial.print(windowSizeMS/1000);
+	Serial.print("s/");
+	Serial.print(windowSizeMS/60000);
+	Serial.println("min");
 	Serial.println("H:M:S - mA");
 
 	zerotime = millis();
@@ -98,6 +169,7 @@ void loop()
 		for (unsigned long i = 0; i < SingleLoopSize; i++)
 		{
 			accumulator += ad7705.readADResult(AD770X::CHN_AIN1);
+			//accumulator += readADC(VOLTAGE_ADC_CHANNEL);
 		}
 		Serial.print(".");
 	}
@@ -105,7 +177,7 @@ void loop()
 
 	delay(500);
 	float a = accumulator / (SingleLoopSize * LoopRepeats);
-	float millivolts = ((a*0.000076295109)-0.00076)*1000;
+	float millivolts = a*0.076295109; //If pre-calibrated
 
 	Serial.print(DurationInHMSstring());
 	Serial.print(" - ");
