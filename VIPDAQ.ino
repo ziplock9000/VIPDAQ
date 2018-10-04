@@ -7,7 +7,16 @@ const unsigned long FIVE_MINUTES = (ONE_MINUTE * 5); //160.76 168.39 168.46 156.
 const unsigned long HALF_HOUR = (ONE_MINUTE * 30); //163.88
 
 const unsigned long SingleLoopSize = FIVE_SECONDS;
-const unsigned long LoopRepeats = 1;
+const unsigned long LoopRepeats = 40;
+
+//7v@700mA - 5sx40=3.33min 
+//123mA
+//122mA
+//Reboot weather station
+//124mA
+//Reboot VIPDAQ (reset calibration)
+//127, 127, 128, 127
+
 
 //30 Minutes
 //00:30:26 - 163.88mA
